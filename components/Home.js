@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import Article from './Article';
@@ -17,9 +16,7 @@ function Home() {
   const articlesData = [];
   let topArticle = null;
 
-  const { data, error, isLoading } = useFetch(
-    `https://morningnews-backend-lovat.vercel.app/articles`
-  );
+  const { data, error, isLoading } = useFetch(`${BACKEND_URL}/articles`);
   if (data) {
     topArticle = data.articles[0];
     articlesData.unshift(...data.articles.filter((_, i) => i > 0));

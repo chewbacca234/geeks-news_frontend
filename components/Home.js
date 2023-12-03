@@ -19,6 +19,8 @@ function Home() {
   if (data) {
     topArticle = data.articles[0];
     articlesData.unshift(...data.articles.filter((_, i) => i > 0));
+  } else {
+    console.error('[Mome.js] Fetch articles error', error);
   }
 
   const articles = articlesData.map((data, i) => {

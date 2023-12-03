@@ -8,6 +8,8 @@ import { faBookmark, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useFetch } from '../hooks';
 
 function Article(props) {
+  const BACKEND_URL = process.env.BACKEND_URL;
+
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.value);
 
@@ -17,7 +19,7 @@ function Article(props) {
     }
 
     const { data, error, isLoading } = useFetch(
-      `http://localhost:3000/users/canBookmark/${user.token}`
+      `${BACKEND_URL}/users/canBookmark/${user.token}`
     );
     if (data.result && data.canBookmark) {
       if (props.isBookmarked) {
@@ -27,7 +29,7 @@ function Article(props) {
       }
     }
 
-    // fetch(`http://localhost:3000/users/canBookmark/${user.token}`)
+    // fetch(`${BACKEND_URL}/users/canBookmark/${user.token}`)
     //   .then(response => response.json())
     //   .then(data => {
     //     if (data.result && data.canBookmark) {

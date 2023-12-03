@@ -8,6 +8,8 @@ import { Link } from 'next/link';
 const imgPlaceholder = require('../public/images/picturePlaceholder.png');
 
 function TopArticle(props) {
+  const BACKEND_URL = process.env.BACKEND_URL;
+
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.value);
 
@@ -16,7 +18,7 @@ function TopArticle(props) {
       return;
     }
 
-    fetch(`http://localhost:3000/users/canBookmark/${user.token}`)
+    fetch(`${BACKEND_URL}/users/canBookmark/${user.token}`)
       .then(response => response.json())
       .then(data => {
         if (data.result && data.canBookmark) {

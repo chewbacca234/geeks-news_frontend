@@ -7,13 +7,15 @@ import styles from '../styles/Home.module.css';
 import { useFetch } from '../hooks';
 
 function Home() {
+  const BACKEND_URL = process.env.BACKEND_URL;
+
   const bookmarks = useSelector(state => state.bookmarks.value);
   const hiddenArticles = useSelector(state => state.hiddenArticles);
 
   const articlesData = [];
   let topArticle = null;
 
-  const { data, error, isLoading } = useFetch('http://localhost:3000/articles');
+  const { data, error, isLoading } = useFetch(`${BACKEND_URL}/articles`);
   if (data) {
     topArticle = data.articles[0];
     articlesData.unshift(...data.articles.filter((_, i) => i > 0));

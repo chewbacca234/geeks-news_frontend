@@ -9,6 +9,8 @@ import { useFetch } from '../hooks';
 function Home() {
   const BACKEND_URL = process.env.BACKEND_URL;
 
+  console.log('BACKEND_URL', BACKEND_URL);
+
   const bookmarks = useSelector(state => state.bookmarks.value);
   const hiddenArticles = useSelector(state => state.hiddenArticles);
 

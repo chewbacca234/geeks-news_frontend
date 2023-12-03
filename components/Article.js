@@ -8,8 +8,6 @@ import { faBookmark, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useFetch } from '../hooks';
 
 function Article(props) {
-  const BACKEND_URL = process.env.BACKEND_URL;
-
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.value);
 
@@ -19,7 +17,7 @@ function Article(props) {
     }
 
     const { data, error, isLoading } = useFetch(
-      `${BACKEND_URL}/users/canBookmark/${user.token}`
+      `https://morningnews-backend-lovat.vercel.app/users/canBookmark/${user.token}`
     );
     if (data.result && data.canBookmark) {
       if (props.isBookmarked) {
@@ -29,7 +27,7 @@ function Article(props) {
       }
     }
 
-    // fetch(`${BACKEND_URL}/users/canBookmark/${user.token}`)
+    // fetch(`https://morningnews-backend-lovat.vercel.app/users/canBookmark/${user.token}`)
     //   .then(response => response.json())
     //   .then(data => {
     //     if (data.result && data.canBookmark) {

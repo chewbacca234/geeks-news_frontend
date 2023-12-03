@@ -4,12 +4,9 @@ import styles from '../styles/TopArticle.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { Link } from 'next/link';
 const imgPlaceholder = require('../public/images/picturePlaceholder.png');
 
 function TopArticle(props) {
-  const BACKEND_URL = process.env.BACKEND_URL;
-
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.value);
 
@@ -18,7 +15,9 @@ function TopArticle(props) {
       return;
     }
 
-    fetch(`${BACKEND_URL}/users/canBookmark/${user.token}`)
+    fetch(
+      `https://morningnews-backend-lovat.vercel.app/users/canBookmark/${user.token}`
+    )
       .then(response => response.json())
       .then(data => {
         if (data.result && data.canBookmark) {

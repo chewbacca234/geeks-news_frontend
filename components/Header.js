@@ -11,8 +11,6 @@ import { Modal } from 'antd';
 import Link from 'next/link';
 
 function Header() {
-  const BACKEND_URL = process.env.BACKEND_URL;
-
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.value);
 
@@ -28,7 +26,7 @@ function Header() {
   }, []);
 
   const handleRegister = () => {
-    fetch(`${BACKEND_URL}/users/signup`, {
+    fetch(`https://morningnews-backend-lovat.vercel.app/users/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -48,7 +46,7 @@ function Header() {
   };
 
   const handleConnection = () => {
-    fetch(`${BACKEND_URL}/users/signin`, {
+    fetch(`https://morningnews-backend-lovat.vercel.app/users/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

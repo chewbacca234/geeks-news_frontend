@@ -23,7 +23,7 @@ const useFetch = (url, method = 'GET', body = {}, listenedState = null) => {
         setIsLoading(false);
       }
     })();
-  }, [listenedState]);
+  }, [url, listenedState]);
 
   return {
     data,

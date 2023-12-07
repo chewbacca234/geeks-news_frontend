@@ -14,6 +14,5 @@ export const hiddenArticlesSlice = createSlice({
   },
 });
 
-export const { hideArticle, showAllArticles } =
-  hiddenArticlesSlice.actions;
+export const { hideArticle, showAllArticles } = hiddenArticlesSlice.actions;
 export const hiddenArticles = hiddenArticlesSlice.reducer;

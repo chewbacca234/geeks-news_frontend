@@ -67,10 +67,6 @@ function Article(props) {
         alt={props.title}
         width={600}
         height={314}
-        loader={props.isLoading}
-        placeholder="blur"
-        blurDataURL="images/picturePlaceholder.png"
-        // style={{ objectFit: 'cover', height: 370, width: 600 }}
       />
       <p>{props.description}</p>
     </div>

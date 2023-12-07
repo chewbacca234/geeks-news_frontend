@@ -9,7 +9,7 @@ import { faUser, faXmark, faEye } from '@fortawesome/free-solid-svg-icons';
 import Moment from 'react-moment';
 import { Modal, Popover, Tooltip } from 'antd';
 import Link from 'next/link';
-import { useFetch, useFetchInsideFunction, useForm } from '../hooks';
+import { useFetch, useForm } from '../hooks';
 import { addSource, removeAllSources, removeSource } from '../reducers';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -109,14 +109,14 @@ function Header() {
     setIsModalVisible(!isModalVisible);
   };
 
-  const sourceIsSelected = sourceName =>
-    selectedSources.some(source => source === sourceName);
+  const sourceIsSelected = sourceId =>
+    selectedSources.some(source => source === sourceId);
 
-  const handleSourceClick = sourceName => {
-    if (sourceIsSelected(sourceName)) {
-      dispatch(removeSource(sourceName));
+  const handleSourceClick = sourceId => {
+    if (sourceIsSelected(sourceId)) {
+      dispatch(removeSource(sourceId));
     } else {
-      dispatch(addSource(sourceName));
+      dispatch(addSource(sourceId));
     }
   };
 
@@ -178,7 +178,6 @@ function Header() {
     }
   }
 
-  console.log('The Verge is selected ?', sourceIsSelected('The Verge'));
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
@@ -201,11 +200,11 @@ function Header() {
               >
                 <button
                   className={
-                    sourceIsSelected(source.name)
+                    sourceIsSelected(source.id)
                       ? styles.sourceOn
                       : styles.sourceOff
                   }
-                  onClick={() => handleSourceClick(source.name)}
+                  onClick={() => handleSourceClick(source.id)}
                 >
                   {source.name}
                 </button>

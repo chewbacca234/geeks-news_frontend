@@ -9,11 +9,14 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 function Home() {
   const hiddenArticles = useSelector(state => state.hiddenArticles);
+  const selectedSources = useSelector(state => state.sources);
 
   const articlesData = [];
   let topArticle = null;
 
-  const { data, error, isLoading } = useFetch(`${BACKEND_URL}/articles`);
+  const { data, error, isLoading } = useFetch(
+    `${BACKEND_URL}/articles/:${selectedSources.join()}`
+  );
   if (data) {
     topArticle = data.articles[0];
     articlesData.unshift(...data.articles.filter((_, i) => i > 0));

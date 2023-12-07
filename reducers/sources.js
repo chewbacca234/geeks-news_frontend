@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = ['The Verge'];
+const initialState = ['the-verge'];
 
 export const sourcesSlice = createSlice({
   name: 'sources',
@@ -10,11 +10,9 @@ export const sourcesSlice = createSlice({
       state.push(action.payload);
     },
     removeSource: (state, action) => {
-      state = state.filter(source => source !== action.payload);
+      return (state = state.filter(source => source !== action.payload));
     },
-    removeAllSources: state => {
-      state = initialState;
-    },
+    removeAllSources: state => (state = initialState),
   },
 });
 

@@ -1,65 +1,98 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/user';
-import { removeAllBookmark } from '../reducers/bookmarks';
-import { showAll } from '../reducers/hiddenArticles';
+import { removeAllBookmarks } from '../reducers/bookmarks';
+import { showAllArticles } from '../reducers/hiddenArticles';
 import styles from '../styles/Header.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faEye } from '@fortawesome/free-solid-svg-icons';
 import Moment from 'react-moment';
-import { Modal } from 'antd';
+import { Modal, Popover, Tooltip } from 'antd';
 import Link from 'next/link';
+import { useFetch, useForm } from '../hooks';
+import { removeAllSources } from '../reducers';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 function Header() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.value);
+  const user = useSelector(state => state.user);
 
   const [date, setDate] = useState('2050-11-22T23:59:59');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [signUpUsername, setSignUpUsername] = useState('');
-  const [signUpPassword, setSignUpPassword] = useState('');
-  const [signInUsername, setSignInUsername] = useState('');
-  const [signInPassword, setSignInPassword] = useState('');
+
+  const { formData, handleChange, handleSubmit } = useForm({
+    onSubmit: e =>
+      e.target.firstChild.name === 'signUpUsername'
+        ? handleRegister(formData.signUpUsername, formData.signUpPassword)
+        : handleConnection(formData.signInUsername, formData.signInPassword),
+  });
+  const signUpFields = [
+    {
+      name: 'signUpUsername',
+      type: 'text',
+      placeholder: 'Username',
+    },
+    {
+      name: 'signUpPassword',
+      type: 'password',
+      placeholder: 'password',
+    },
+  ];
+  const signInFields = [
+    {
+      name: 'signInUsername',
+      placeholder: 'Username',
+    },
+    {
+      name: 'signInPassword',
+      type: 'password',
+      placeholder: 'password',
+    },
+  ];
 
   useEffect(() => {
     setDate(new Date());
   }, []);
 
-  const handleRegister = () => {
-    fetch(`https://morningnews-backend-lovat.vercel.app/users/signup`, {
+  const { data, isLoading: loadingSources } = useFetch(
+    `${BACKEND_URL}/sources`
+  );
+  const sources = data?.sources;
+
+  const handleRegister = (username, password) => {
+    console.log('username', username);
+    fetch(`${BACKEND_URL}/users/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: signUpUsername,
-        password: signUpPassword,
+        username,
+        password,
       }),
     })
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          dispatch(login({ username: signUpUsername, token: data.token }));
-          setSignUpUsername('');
-          setSignUpPassword('');
+          dispatch(login({ username: data.username, token: data.token }));
           setIsModalVisible(false);
         }
       });
   };
 
-  const handleConnection = () => {
-    fetch(`https://morningnews-backend-lovat.vercel.app/users/signin`, {
+  const handleConnection = (username, password) => {
+    fetch(`${BACKEND_URL}/users/signin`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: signInUsername,
-        password: signInPassword,
+        username,
+        password,
       }),
     })
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          dispatch(login({ username: signInUsername, token: data.token }));
-          setSignInUsername('');
-          setSignInPassword('');
+          console.log('data', data);
+          dispatch(login({ username: data.username, token: data.token }));
           setIsModalVisible(false);
         }
       });
@@ -67,11 +100,20 @@ function Header() {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(removeAllBookmark());
+    dispatch(removeAllBookmarks());
+    dispatch(showAllArticles());
+    dispatch(removeAllSources());
   };
 
   const showModal = () => {
     setIsModalVisible(!isModalVisible);
+  };
+
+  const handleSourceClick = () => {
+    if (condition) {
+      // Dosomething
+    } else {
+    }
   };
 
   let modalContent;
@@ -80,43 +122,21 @@ function Header() {
       <div className={styles.registerContainer}>
         <div className={styles.registerSection}>
           <p>Sign-up</p>
-          <input
-            type="text"
-            placeholder="Username"
-            id="signUpUsername"
-            onChange={e => setSignUpUsername(e.target.value)}
-            value={signUpUsername}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            id="signUpPassword"
-            onChange={e => setSignUpPassword(e.target.value)}
-            value={signUpPassword}
-          />
-          <button id="register" onClick={() => handleRegister()}>
-            Register
-          </button>
+          <form onSubmit={handleSubmit}>
+            {signUpFields.map(field => (
+              <input key={field.name} {...field} onChange={handleChange} />
+            ))}
+            <button type="submit">Register</button>
+          </form>
         </div>
         <div className={styles.registerSection}>
           <p>Sign-in</p>
-          <input
-            type="text"
-            placeholder="Username"
-            id="signInUsername"
-            onChange={e => setSignInUsername(e.target.value)}
-            value={signInUsername}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            id="signInPassword"
-            onChange={e => setSignInPassword(e.target.value)}
-            value={signInPassword}
-          />
-          <button id="connection" onClick={() => handleConnection()}>
-            Connect
-          </button>
+          <form onSubmit={handleSubmit}>
+            {signInFields.map(field => (
+              <input key={field.name} {...field} onChange={handleChange} />
+            ))}
+            <button type="submit">Connect</button>
+          </form>
         </div>
       </div>
     );
@@ -158,8 +178,27 @@ function Header() {
     <header className={styles.header}>
       <div className={styles.logoContainer}>
         <Moment className={styles.date} date={date} format="MMM Do YYYY" />
-        <h1 className={styles.title}>Morning News</h1>
+        <h1 className={styles.title}>The Geeks News</h1>
         {userSection}
+      </div>
+
+      <div className={styles.sourcesContainer}>
+        {loadingSources || !sources
+          ? [...Array(10)].map((_, index) => (
+              <div key={index} className={styles.source}></div>
+            ))
+          : sources.map(source => (
+              <Tooltip
+                key={source.id}
+                placement="bottom"
+                arrow={false}
+                title={source.description}
+              >
+                <button className={styles.sourceOn} onClick={handleSourceClick}>
+                  {source.name}
+                </button>
+              </Tooltip>
+            ))}
       </div>
 
       <div className={styles.linkContainer}>
@@ -170,7 +209,7 @@ function Header() {
           <span className={styles.link}>Bookmarks</span>
         </Link>
         <FontAwesomeIcon
-          onClick={() => dispatch(showAll())}
+          onClick={() => dispatch(showAllArticles())}
           icon={faEye}
           className={styles.link}
         />
@@ -181,7 +220,7 @@ function Header() {
           <Modal
             getContainer="#react-modals"
             className={styles.modal}
-            visible={isModalVisible}
+            open={isModalVisible}
             closable={false}
             footer={null}
           >

@@ -3,16 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = [];
 
 export const hiddenArticlesSlice = createSlice({
-  name: 'user',
+  name: 'hiddenArticles',
   initialState,
   reducers: {
     hideArticle: (state, action) => {
-      const title = action.payload
+      const title = action.payload;
       state.push(title);
     },
-    showAll: (state) => state = [],
+    showAllArticles: state => (state = []),
   },
 });
 
-export const { hideArticle, showAll } = hiddenArticlesSlice.actions;
-export default hiddenArticlesSlice.reducer;
+export const { hideArticle, showAllArticles } =
+  hiddenArticlesSlice.actions;
+export const hiddenArticles = hiddenArticlesSlice.reducer;

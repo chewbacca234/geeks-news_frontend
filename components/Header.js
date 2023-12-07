@@ -9,14 +9,15 @@ import { faUser, faXmark, faEye } from '@fortawesome/free-solid-svg-icons';
 import Moment from 'react-moment';
 import { Modal, Popover, Tooltip } from 'antd';
 import Link from 'next/link';
-import { useFetch, useForm } from '../hooks';
-import { removeAllSources } from '../reducers';
+import { useFetch, useFetchInsideFunction, useForm } from '../hooks';
+import { addSource, removeAllSources, removeSource } from '../reducers';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 function Header() {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const selectedSources = useSelector(state => state.sources);
 
   const [date, setDate] = useState('2050-11-22T23:59:59');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -61,7 +62,6 @@ function Header() {
   const sources = data?.sources;
 
   const handleRegister = (username, password) => {
-    console.log('username', username);
     fetch(`${BACKEND_URL}/users/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -74,9 +74,9 @@ function Header() {
       .then(data => {
         if (data.result) {
           dispatch(login({ username: data.username, token: data.token }));
-          setIsModalVisible(false);
         }
-      });
+      })
+      .finally(() => setIsModalVisible(false));
   };
 
   const handleConnection = (username, password) => {
@@ -93,9 +93,9 @@ function Header() {
         if (data.result) {
           console.log('data', data);
           dispatch(login({ username: data.username, token: data.token }));
-          setIsModalVisible(false);
         }
-      });
+      })
+      .finally(() => setIsModalVisible(false));
   };
 
   const handleLogout = () => {
@@ -109,10 +109,14 @@ function Header() {
     setIsModalVisible(!isModalVisible);
   };
 
-  const handleSourceClick = () => {
-    if (condition) {
-      // Dosomething
+  const sourceIsSelected = sourceName =>
+    selectedSources.some(source => source === sourceName);
+
+  const handleSourceClick = sourceName => {
+    if (sourceIsSelected(sourceName)) {
+      dispatch(removeSource(sourceName));
     } else {
+      dispatch(addSource(sourceName));
     }
   };
 
@@ -174,6 +178,7 @@ function Header() {
     }
   }
 
+  console.log('The Verge is selected ?', sourceIsSelected('The Verge'));
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
@@ -185,7 +190,7 @@ function Header() {
       <div className={styles.sourcesContainer}>
         {loadingSources || !sources
           ? [...Array(10)].map((_, index) => (
-              <div key={index} className={styles.source}></div>
+              <div key={index} className={styles.sourceOff}></div>
             ))
           : sources.map(source => (
               <Tooltip
@@ -194,7 +199,14 @@ function Header() {
                 arrow={false}
                 title={source.description}
               >
-                <button className={styles.sourceOn} onClick={handleSourceClick}>
+                <button
+                  className={
+                    sourceIsSelected(source.name)
+                      ? styles.sourceOn
+                      : styles.sourceOff
+                  }
+                  onClick={() => handleSourceClick(source.name)}
+                >
                   {source.name}
                 </button>
               </Tooltip>

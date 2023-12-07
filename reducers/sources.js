@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = ['the-verge'];
+const initialState = ['The Verge'];
 
 export const sourcesSlice = createSlice({
   name: 'sources',

@@ -15,6 +15,7 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'raumet.com',
       'res.cloudinary.com',
+      'media.wired.com',
     ],
   },
 };

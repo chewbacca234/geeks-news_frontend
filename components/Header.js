@@ -7,7 +7,7 @@ import styles from '../styles/Header.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faEye } from '@fortawesome/free-solid-svg-icons';
 import Moment from 'react-moment';
-import { Modal, Popover, Tooltip } from 'antd';
+import { Modal, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useFetch, useForm } from '../hooks';
 import { addSource, removeAllSources, removeSource } from '../reducers';
@@ -126,16 +126,18 @@ function Header() {
       <div className={styles.registerContainer}>
         <div className={styles.registerSection}>
           <p>Sign-up</p>
-          <form onSubmit={handleSubmit}>
+          <form className={styles.registerSectionForm} onSubmit={handleSubmit}>
             {signUpFields.map(field => (
               <input key={field.name} {...field} onChange={handleChange} />
             ))}
             <button type="submit">Register</button>
           </form>
         </div>
-        <div className={styles.registerSection}>
+        <div
+          className={`${styles.registerSection} ${styles.registerSectionRight}`}
+        >
           <p>Sign-in</p>
-          <form onSubmit={handleSubmit}>
+          <form className={styles.registerSectionForm} onSubmit={handleSubmit}>
             {signInFields.map(field => (
               <input key={field.name} {...field} onChange={handleChange} />
             ))}
@@ -230,7 +232,6 @@ function Header() {
         <div id="react-modals">
           <Modal
             getContainer="#react-modals"
-            className={styles.modal}
             open={isModalVisible}
             closable={false}
             footer={null}

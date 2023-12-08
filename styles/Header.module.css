@@ -99,8 +99,6 @@
 
 .registerContainer {
   display: flex;
-  margin-bottom: 10px;
-  border-top: 0.5px lightgray solid;
 }
 
 .registeredContainer {
@@ -111,9 +109,25 @@
 
 .registerSection {
   width: 250px;
-  margin: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.registerSectionRight {
+  border-left: 1px solid gray;
+}
+
+.registerSection p {
+  margin-top: 0;
+  margin-bottom: 32;
+}
+
+.registerSectionForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 

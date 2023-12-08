@@ -1,27 +1,44 @@
 .articles {
-	width: 400px;
-	height: 400px;
-	margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 400px;
+  height: 400px;
+  margin: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 0.5px solid black;
+  box-shadow: 2px 1px 6px gray;
+  background-color: white;
+  cursor: pointer;
 }
 
 .divider {
-	width: 100%;
-	height: 1px;
-	background-color: rgb(233, 190, 89);
-	margin: 15px 0px 15px 0px
+  width: 100%;
+  height: 1px;
+  background-color: rgb(233, 190, 89);
+  margin: 15px 0px 15px 0px;
 }
 
 .articleHeader {
-	display: flex;
-	justify-content: space-between;
-	height: 40px;
-	gap: 8px;
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  gap: 8px;
+}
+
+.articleHeaderIcons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 20px;
+  gap: 8px;
 }
 
 .bookmarkIcon {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .bookmarkIcon:hover {
-	opacity: 0.6;
+  opacity: 0.6;
 }

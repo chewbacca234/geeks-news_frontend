@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import Head from 'next/head';
 import Article from './Article';
-import TopArticle from './TopArticle';
 import styles from '../styles/Home.module.css';
 import { useFetch } from '../hooks';
 
@@ -11,46 +10,57 @@ function Home() {
   const hiddenArticles = useSelector(state => state.hiddenArticles);
   const selectedSources = useSelector(state => state.sources);
 
-  const articlesData = [];
-  let topArticle = null;
+  let articlesData = [];
 
   const { data, error, isLoading } = useFetch(
-    `${BACKEND_URL}/articles/:${selectedSources.join()}`
+    `${BACKEND_URL}/articles/${selectedSources.join()}`,
+    'GET',
+    null,
+    selectedSources
   );
   if (data) {
-    topArticle = data.articles[0];
-    articlesData.unshift(...data.articles.filter((_, i) => i > 0));
+    articlesData = data.articles;
+    articlesData.sort((a, b) => {
+      const dateA = new Date(a.publishedAt);
+      const dateB = new Date(b.publishedAt);
+      return dateB - dateA;
+    });
   } else if (error) {
     console.error('[Mome.js] Fetch articles error', error);
   }
-
-  const articles = articlesData.map(data => {
-    const isHidden = hiddenArticles.some(
-      articleTitle => articleTitle === data.title
-    );
-    if (!isHidden) {
-      return (
-        <Article
-          key={data.title}
-          {...data}
-          isLoading={isLoading}
-          hideIcon={'show'}
-        />
-      );
-    }
-  });
-
-  const topArticleComponent = (
-    <TopArticle {...topArticle} isLoading={isLoading} />
-  );
 
   return (
     <div>
       <Head>
         <title>Morning News - Home</title>
       </Head>
-      {topArticleComponent}
-      <div className={styles.articlesContainer}>{articles}</div>
+      {isLoading ? (
+        <p className={styles.noArticlesInfo}>Loading articles...</p>
+      ) : selectedSources.length > 0 ? (
+        articlesData.length > 0 ? (
+          <div className={styles.articlesContainer}>
+            {articlesData.map(data => {
+              const isHidden = hiddenArticles.some(
+                articleTitle => articleTitle === data.title
+              );
+              if (!isHidden) {
+                return (
+                  <Article
+                    key={data.title}
+                    {...data}
+                    isLoading={isLoading}
+                    hideIcon={'show'}
+                  />
+                );
+              }
+            })}
+          </div>
+        ) : (
+          <p className={styles.noArticlesInfo}>No articles found</p>
+        )
+      ) : (
+        <p className={styles.noArticlesInfo}>Select a source to see articles</p>
+      )}
     </div>
   );
 }

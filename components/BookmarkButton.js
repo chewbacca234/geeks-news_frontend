@@ -26,7 +26,8 @@ export default function BookmarkButton({ title }) {
     });
   };
 
-  const handleBookmarkClick = () => {
+  const handleBookmarkClick = event => {
+    event.stopPropagation();
     if (!user.token) {
       openCanNotBookmarkNotification();
     } else {

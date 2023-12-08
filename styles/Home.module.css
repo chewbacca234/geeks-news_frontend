@@ -1,11 +1,15 @@
 .articlesContainer {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 32px;
 }
 
 .sectionTitle {
-	margin-left: 25px;
+  margin-left: 25px;
+}
+
+.noArticlesInfo {
+  text-align: center;
 }

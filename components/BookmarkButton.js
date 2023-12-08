@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
-import styles from '../styles/TopArticle.module.css';
+import styles from '../styles/Bookmarks.module.css';
 import { notification } from 'antd';
 import { addBookmark, removeBookmark } from '../reducers/bookmarks';
 import { useSelector } from 'react-redux';

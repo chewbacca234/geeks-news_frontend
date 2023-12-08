@@ -1,5 +1,5 @@
-# morningnews_frontend
+# Geeks News | Frontend
 
-Display daily news from The Verge.
+Display daily news from tech sources.
 
-If you want to bookmark your favorites articles you have to connect.
+To bookmark your favorites articles you have to connect.

@@ -221,11 +221,13 @@ function Header() {
         <Link href="/bookmarks">
           <span className={styles.link}>Bookmarks</span>
         </Link>
-        <FontAwesomeIcon
-          onClick={() => dispatch(showAllArticles())}
-          icon={faEye}
-          className={styles.link}
-        />
+        <Tooltip placement="top" arrow={false} title="Show all masked">
+          <FontAwesomeIcon
+            onClick={() => dispatch(showAllArticles())}
+            icon={faEye}
+            className={styles.link}
+          />
+        </Tooltip>
       </div>
 
       {isModalVisible && (

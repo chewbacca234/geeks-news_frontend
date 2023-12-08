@@ -10,7 +10,6 @@ import moment from 'moment';
 
 function Article(props) {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.value);
 
   const handleArticleClick = () => {
     if (props.url) {
@@ -28,7 +27,7 @@ function Article(props) {
       <div className={styles.articleHeader}>
         <h3>{props.title}</h3>
         <div className={styles.articleHeaderIcons}>
-          <BookmarkButton title={props.title} />
+          <BookmarkButton article={props} />
           {props.hideIcon === 'show' ? (
             <FontAwesomeIcon
               onClick={handleEyeSlashClick}

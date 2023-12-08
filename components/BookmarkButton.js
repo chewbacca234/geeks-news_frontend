@@ -3,20 +3,23 @@ import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Bookmarks.module.css';
 import { notification } from 'antd';
 import { addBookmark, removeBookmark } from '../reducers/bookmarks';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export default function BookmarkButton({ title }) {
+export default function BookmarkButton({ article }) {
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const bookmarks = useSelector(state => state.bookmarks);
+
+  const isBookmarked = bookmarks.some(
+    bookmark => bookmark.title === article.title
+  );
 
   let iconStyle = {};
   if (isBookmarked) {
     iconStyle = { color: '#E9BE59' };
   }
-
-  const isBookmarked = bookmarks.some(bookmark => bookmark.title === title);
 
   const [api, contextHolder] = notification.useNotification();
   const openCanNotBookmarkNotification = () => {
@@ -36,9 +39,9 @@ export default function BookmarkButton({ title }) {
         .then(data => {
           if (data.result && data.canBookmark) {
             if (isBookmarked) {
-              dispatch(removeBookmark(title));
+              dispatch(removeBookmark(article));
             } else {
-              dispatch(addBookmark(title));
+              dispatch(addBookmark(article));
             }
           }
         });

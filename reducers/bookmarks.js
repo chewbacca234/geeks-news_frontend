@@ -10,7 +10,9 @@ export const bookmarksSlice = createSlice({
       state.push(action.payload);
     },
     removeBookmark: (state, action) => {
-      return (state = state.filter(bookmark => bookmark !== action.payload));
+      return (state = state.filter(
+        bookmark => bookmark.title !== action.payload.title
+      ));
     },
     removeAllBookmarks: state => (state = []),
   },

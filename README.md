@@ -22,7 +22,7 @@ Have fun using it!
 ## 💻 View in production
 
 1. Go to [Geeks News](https://geeks-news.vercel.app/).
-2. Choose some sources to view there top headlines articles.
+2. Choose some sources to view their top headlines articles.
 
 ![app screenshot](./public/images/geeks-news-snapshot-1.jpg)
 

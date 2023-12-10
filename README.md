@@ -24,7 +24,7 @@ Have fun using it!
 1. Go to [Geeks News](https://geeks-news.vercel.app/).
 2. Choose some sources to view there top headlines articles.
 
-![app screenshot](.\public\images\geeks-news-snapshot-1.jpg)
+![app screenshot](./public/images/geeks-news-snapshot-1.jpg)
 
 3. Create an account to bookmark articles.
 4. You can hide some articles by clicking the eye icon.

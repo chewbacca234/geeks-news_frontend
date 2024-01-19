@@ -235,7 +235,8 @@ function Header() {
           <Modal
             getContainer="#react-modals"
             open={isModalVisible}
-            closable={false}
+            onCancel={showModal}
+            closable={true}
             footer={null}
           >
             {modalContent}

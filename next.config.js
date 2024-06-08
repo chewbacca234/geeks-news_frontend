@@ -16,6 +16,7 @@ const nextConfig = {
       'raumet.com',
       'res.cloudinary.com',
       'media.wired.com',
+      'techcrunch.com',
     ],
   },
 };

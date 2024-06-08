@@ -26,35 +26,37 @@
 }
 
 .sourcesContainer {
-  width: 90%;
+  width: 90vw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   margin-bottom: 32px;
-  gap: 8px;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 1px;
+  gap: 16px 32px;
 }
 
 .sourceOn {
+  letter-spacing: 0.2px;
+  font-size: 16px;
   min-width: 120px;
   height: 40px;
   background-color: white;
   border-radius: 8px;
   border: 1px solid black;
-  box-shadow: 2px 1px 6px gray;
+  box-shadow: 0px 0px 6px gray;
   color: black;
   padding: 8px 16px;
 }
 
 .sourceOff {
+  letter-spacing: 0.2px;
+  font-size: 16px;
   min-width: 120px;
   height: 40px;
   background-color: grey;
   border-radius: 8px;
-  box-shadow: 2px 1px 6px gray;
+  border: 1px solid grey;
+  /* box-shadow: 2px 1px 6px gray; */
   color: white;
   font-weight: 400;
   padding: 8px 16px;

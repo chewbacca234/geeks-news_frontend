@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/user';
-import { removeAllBookmarks } from '../reducers/bookmarks';
-import { showAllArticles } from '../reducers/hiddenArticles';
+import { bookmarks, removeAllBookmarks } from '../reducers/bookmarks';
+import {
+  hiddenArticles,
+  hideArticles,
+  showAllArticles,
+} from '../reducers/hiddenArticles';
 import styles from '../styles/Header.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faEye } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +22,8 @@ function Header() {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const selectedSources = useSelector(state => state.sources);
+  const hiddenArticles = useSelector(state => state.hiddenArticles);
+  const bookmarks = useSelector(state => state.bookmarks);
 
   const [date, setDate] = useState('2050-11-22T23:59:59');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -68,6 +74,8 @@ function Header() {
       body: JSON.stringify({
         username,
         password,
+        hiddenArticles,
+        sources: selectedSources,
       }),
     })
       .then(response => response.json())
@@ -99,10 +107,27 @@ function Header() {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
-    dispatch(removeAllBookmarks());
-    dispatch(showAllArticles());
-    dispatch(removeAllSources());
+    fetch(`${BACKEND_URL}/users/update`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        username: user.username,
+        hiddenArticles,
+        bookmarks,
+        sources: selectedSources,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          console.log('data', data);
+          dispatch(removeAllBookmarks());
+          dispatch(showAllArticles());
+          dispatch(removeAllSources());
+          dispatch(logout());
+        }
+      })
+      .catch(error => console.error(error));
   };
 
   const showModal = () => {
@@ -193,25 +218,37 @@ function Header() {
           ? [...Array(10)].map((_, index) => (
               <div key={index} className={styles.sourceOff}></div>
             ))
-          : sources.map(source => (
-              <Tooltip
-                key={source.id}
-                placement="bottom"
-                arrow={false}
-                title={source.description}
-              >
-                <button
-                  className={
-                    sourceIsSelected(source.id)
-                      ? styles.sourceOn
-                      : styles.sourceOff
-                  }
-                  onClick={() => handleSourceClick(source.id)}
-                >
-                  {source.name}
-                </button>
-              </Tooltip>
-            ))}
+          : sources.map(source => {
+              const authorizedSources = [
+                'the-verge',
+                'wired',
+                'techradar',
+                'techcrunch',
+                'recode',
+                'ars-technica',
+              ];
+              if (authorizedSources.includes(source.id)) {
+                return (
+                  <Tooltip
+                    key={source.id}
+                    placement="bottom"
+                    arrow={false}
+                    title={source.description}
+                  >
+                    <button
+                      className={
+                        sourceIsSelected(source.id)
+                          ? styles.sourceOn
+                          : styles.sourceOff
+                      }
+                      onClick={() => handleSourceClick(source.id)}
+                    >
+                      {source.name}
+                    </button>
+                  </Tooltip>
+                );
+              }
+            })}
       </div>
 
       <div className={styles.linkContainer}>

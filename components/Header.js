@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/user';
-import { bookmarks, removeAllBookmarks } from '../reducers/bookmarks';
 import {
+  addAllBookmarks,
+  addBookmark,
+  bookmarks,
+  removeAllBookmarks,
+} from '../reducers/bookmarks';
+import {
+  addAllHiddenArticles,
   hiddenArticles,
+  hideArticle,
   hideArticles,
   showAllArticles,
 } from '../reducers/hiddenArticles';
@@ -15,6 +22,7 @@ import { Modal, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useFetch, useForm } from '../hooks';
 import { addSource, removeAllSources, removeSource } from '../reducers';
+import { addAllSources } from '../reducers/sources';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -101,6 +109,9 @@ function Header() {
         if (data.result) {
           console.log('data', data);
           dispatch(login({ username: data.username, token: data.token }));
+          dispatch(addAllBookmarks(data.bookmarks));
+          dispatch(addAllSources(data.sources));
+          dispatch(addAllHiddenArticles(data.hiddenArticles));
         }
       })
       .finally(() => setIsModalVisible(false));

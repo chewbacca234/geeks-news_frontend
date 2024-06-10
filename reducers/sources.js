@@ -9,6 +9,9 @@ export const sourcesSlice = createSlice({
     addSource: (state, action) => {
       state.push(action.payload);
     },
+    addAllSources: (state, action) => {
+      return (state = action.payload);
+    },
     removeSource: (state, action) => {
       return (state = state.filter(source => source !== action.payload));
     },
@@ -16,6 +19,6 @@ export const sourcesSlice = createSlice({
   },
 });
 
-export const { addSource, removeSource, removeAllSources } =
+export const { addSource, addAllSources, removeSource, removeAllSources } =
   sourcesSlice.actions;
 export const sources = sourcesSlice.reducer;

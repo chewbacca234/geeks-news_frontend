@@ -10,9 +10,13 @@ export const hiddenArticlesSlice = createSlice({
       const title = action.payload;
       state.push(title);
     },
+    addAllHiddenArticles: (state, action) => {
+      return (state = action.payload);
+    },
     showAllArticles: state => (state = []),
   },
 });
 
-export const { hideArticle, showAllArticles } = hiddenArticlesSlice.actions;
+export const { hideArticle, addAllHiddenArticles, showAllArticles } =
+  hiddenArticlesSlice.actions;
 export const hiddenArticles = hiddenArticlesSlice.reducer;
